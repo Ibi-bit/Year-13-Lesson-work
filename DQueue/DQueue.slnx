@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/DQueue/">
+    <Project Path="DQueue/DQueue.csproj" />
+  </Folder>
+</Solution>

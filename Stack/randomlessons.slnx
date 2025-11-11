@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../Queue/Queue/Queue.csproj" />
+  <Project Path="StackStructure/StackStructure.csproj" />
+</Solution>

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../CQueue/CircularQueue/CircularQueue.csproj" />
+  <Project Path="Queue/Queue.csproj" />
+</Solution>
