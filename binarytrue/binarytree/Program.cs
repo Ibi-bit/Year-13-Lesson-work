@@ -116,19 +116,19 @@ class BinaryTree<T>
 
     public List<T> TraversalInOrder()
     {
-        var (_, values) = TraversalInOrder(root);
+        var values = new List<T>();
+        TraversalInOrderRec(root, values);
         return values;
     }
 
-    private (Node?, List<T>) TraversalInOrder(Node? node, List<T>? values = null)
+    private void TraversalInOrderRec(Node? node, List<T> values)
     {
         values ??= new List<T>();
         if (node != null)
         {
-            TraversalInOrder(node.Left, values);
+            TraversalInOrderRec(node.Left, values);
             values.Add(node.Data);
-            TraversalInOrder(node.Right, values);
+            TraversalInOrderRec(node.Right, values);
         }
-        return (node, values);
     }
 }
