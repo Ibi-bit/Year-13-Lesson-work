@@ -34,6 +34,8 @@ foreach (var kvp in adjacencyList)
     }
     Console.WriteLine();
 }
+var dfsResult = graph.DepthFirstSearch('A', 'M');
+Console.WriteLine($"Depth First Search from 'A' to 'M': {string.Join(" -> ", dfsResult)}");
 
 public class Graph<T>
     where T : notnull
@@ -111,10 +113,36 @@ public class Graph<T>
         }
         return adjacencyList;
     }
-    public List<T> DepthFirstSearch(T value)
+
+    public List<T> DepthFirstSearch(T from, T to)
     {
-        foreach
-        
+        var path = new List<T>();
+        var visited = new HashSet<Node>();
+
+        if (!Nodes.ContainsKey(from) || !Nodes.ContainsKey(to))
+            return path;
+
+        if (DepthFirstSearchRec(Nodes[from], Nodes[to], path, visited))
+            return path;
+        return new List<T>();
     }
-    private List<Node> DepthFirstSearchRec(List<T> values, List<Node> )
+
+    private bool DepthFirstSearchRec(Node current, Node target, List<T> path, HashSet<Node> visited)
+    {
+        visited.Add(current);
+        path.Add(current.Value);
+        if (current == target)
+            return true;
+        foreach (var neighbor in current.Neighbors)
+        {
+            if (!visited.Contains(neighbor))
+            {
+                if (DepthFirstSearchRec(neighbor, target, path, visited))
+                    return true;
+            }
+        }
+
+        path.RemoveAt(path.Count - 1);
+        return false;
+    }
 }
