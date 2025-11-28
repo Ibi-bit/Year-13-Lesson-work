@@ -9,20 +9,32 @@ graph.Add('G');
 graph.Add('H');
 graph.Add('K');
 graph.Add('M');
-
-graph.BiDirectionalEdge('A', 'B');
-graph.BiDirectionalEdge('A', 'F');
-graph.BiDirectionalEdge('A', 'H');
-graph.BiDirectionalEdge('B', 'H');
-graph.BiDirectionalEdge('B', 'G');
-graph.BiDirectionalEdge('B', 'E');
-graph.BiDirectionalEdge('E', 'G');
-graph.BiDirectionalEdge('E', 'M');
-graph.BiDirectionalEdge('E', 'F');
-graph.BiDirectionalEdge('H', 'G');
-graph.BiDirectionalEdge('H', 'K');
-graph.BiDirectionalEdge('K', 'M');
-graph.BiDirectionalEdge('M', 'G');
+graph.AddEdge('A', 'B');
+graph.AddEdge('A', 'F');
+graph.AddEdge('A', 'H');
+graph.AddEdge('B', 'A');
+graph.AddEdge('B', 'E');
+graph.AddEdge('B', 'G');
+graph.AddEdge('B', 'H');
+graph.AddEdge('E', 'B');
+graph.AddEdge('E', 'F');
+graph.AddEdge('E', 'G');
+graph.AddEdge('E', 'M');
+graph.AddEdge('F', 'A');
+graph.AddEdge('F', 'E');
+graph.AddEdge('G', 'B');
+graph.AddEdge('G', 'E');
+graph.AddEdge('G', 'H');
+graph.AddEdge('G', 'M');
+graph.AddEdge('H', 'A');
+graph.AddEdge('H', 'B');
+graph.AddEdge('H', 'G');
+graph.AddEdge('H', 'K');
+graph.AddEdge('K', 'H');
+graph.AddEdge('K', 'M');
+graph.AddEdge('M', 'E');
+graph.AddEdge('M', 'G');
+graph.AddEdge('M', 'K');
 
 var adjacencyList = graph.CreateAdjacencyList();
 foreach (var kvp in adjacencyList)
@@ -36,6 +48,12 @@ foreach (var kvp in adjacencyList)
 }
 var dfsResult = graph.DepthFirstSearch('A', 'M');
 Console.WriteLine($"Depth First Search from 'A' to 'M': {string.Join(" -> ", dfsResult)}");
+var bfsResult = graph.BreadthFirstSearch('A', 'M');
+Console.WriteLine("Breadth First Search levels from 'A':");
+foreach (var level in bfsResult)
+{
+    Console.WriteLine($"Level {level.Key}: {string.Join(", ", level.Value)}");
+}
 
 public class Graph<T>
     where T : notnull
@@ -144,5 +162,49 @@ public class Graph<T>
 
         path.RemoveAt(path.Count - 1);
         return false;
+    }
+
+    public Dictionary<int, List<T>> BreadthFirstSearch(T from, T to)
+    {
+        var queue = new Queue<Node>();
+        var visited = new HashSet<T>();
+        var levels = new Dictionary<int, List<T>>();
+        var currentLevel = 0;
+
+        if (!Nodes.ContainsKey(from))
+            return levels;
+
+        queue.Enqueue(Nodes[from]);
+        visited.Add(from);
+        levels[0] = new List<T> { from };
+
+        while (queue.Count > 0)
+        {
+            var levelSize = queue.Count;
+            var nextLevelNodes = new List<T>();
+
+            for (int i = 0; i < levelSize; i++)
+            {
+                var current = queue.Dequeue();
+
+                foreach (var neighbor in current.Neighbors)
+                {
+                    if (!visited.Contains(neighbor.Value))
+                    {
+                        visited.Add(neighbor.Value);
+                        queue.Enqueue(neighbor);
+                        nextLevelNodes.Add(neighbor.Value);
+                    }
+                }
+            }
+
+            if (nextLevelNodes.Count > 0)
+            {
+                currentLevel++;
+                levels[currentLevel] = nextLevelNodes;
+            }
+        }
+
+        return levels;
     }
 }

@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/bubblesort/">
+    <Project Path="bubblesort/bubble/bubble.csproj" />
+  </Folder>
+</Solution>
